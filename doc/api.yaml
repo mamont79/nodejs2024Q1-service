@@ -289,6 +289,7 @@ paths:
   /album:
     post:
       operationId: AlbumController_create
+      summary: Create album
       parameters: []
       requestBody:
         required: true
@@ -299,15 +300,31 @@ paths:
       responses:
         '201':
           description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Album'
+      tags:
+        - Album
     get:
       operationId: AlbumController_findAll
+      summary: Get all albums
       parameters: []
       responses:
         '200':
           description: ''
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Album'
+      tags:
+        - Album
   /album/{id}:
     get:
       operationId: AlbumController_findOne
+      summary: Get album with id
       parameters:
         - name: id
           required: true
@@ -317,8 +334,15 @@ paths:
       responses:
         '200':
           description: ''
-    patch:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Album'
+      tags:
+        - Album
+    put:
       operationId: AlbumController_update
+      summary: Update album with id
       parameters:
         - name: id
           required: true
@@ -334,8 +358,15 @@ paths:
       responses:
         '200':
           description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Album'
+      tags:
+        - Album
     delete:
       operationId: AlbumController_remove
+      summary: Delete track with id
       parameters:
         - name: id
           required: true
@@ -343,8 +374,10 @@ paths:
           schema:
             type: string
       responses:
-        '200':
+        '204':
           description: ''
+      tags:
+        - Album
   /favs:
     post:
       operationId: FavsController_create
@@ -558,10 +591,54 @@ components:
         - duration
     CreateAlbumDto:
       type: object
-      properties: {}
+      properties:
+        name:
+          type: string
+        year:
+          type: number
+        artistId:
+          type: string
+          format: uuid
+          nullable: true
+      required:
+        - name
+        - year
+        - artistId
+    Album:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          nullable: true
+        name:
+          type: string
+        year:
+          type: number
+        artistId:
+          type: string
+          format: uuid
+          nullable: true
+      required:
+        - id
+        - name
+        - year
+        - artistId
     UpdateAlbumDto:
       type: object
-      properties: {}
+      properties:
+        name:
+          type: string
+        year:
+          type: number
+        artistId:
+          type: string
+          format: uuid
+          nullable: true
+      required:
+        - name
+        - year
+        - artistId
     CreateFavDto:
       type: object
       properties: {}
