@@ -1,26 +1,59 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { v4 as uuidv4 } from 'uuid';
 import { CreateTrackDto } from './dto/create-track.dto';
 import { UpdateTrackDto } from './dto/update-track.dto';
+import { DbService } from '../db/db.service';
+import { ITrack } from '../types/types';
 
 @Injectable()
 export class TrackService {
+  constructor(private readonly db: DbService) {}
+
+  private DbTracks: Array<ITrack> = this.db.tracks;
+
   create(createTrackDto: CreateTrackDto) {
-    return 'This action adds a new track';
+    const trackId = uuidv4();
+
+    const newTrack: ITrack = {
+      id: trackId,
+      ...createTrackDto,
+    };
+
+    this.DbTracks.push(newTrack);
+    return newTrack;
   }
 
   findAll() {
-    return `This action returns all track`;
+    return this.DbTracks;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} track`;
+  findOne(id: string) {
+    const trackToFind = this.DbTracks.find((track) => track.id === id);
+    return trackToFind;
   }
 
-  update(id: number, updateTrackDto: UpdateTrackDto) {
-    return `This action updates a #${id} track`;
+  update(id: string, updateTrackDto: UpdateTrackDto) {
+    const trackToUpdate = this.DbTracks.find((track) => track.id === id);
+
+    if (!trackToUpdate) return trackToUpdate;
+
+    trackToUpdate.name = updateTrackDto.name;
+    trackToUpdate.artistId = updateTrackDto.artistId;
+    trackToUpdate.albumId = updateTrackDto.albumId;
+    trackToUpdate.duration = updateTrackDto.duration;
+
+    return trackToUpdate;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} track`;
+  remove(id: string) {
+    const idTreckToRemove = this.DbTracks.findIndex((track) => track.id === id);
+
+    if (idTreckToRemove < 0) {
+      throw new NotFoundException({
+        message: `Can't find track with id ${id}. Please, check your id`,
+      });
+    }
+
+    this.DbTracks.splice(idTreckToRemove, 1);
   }
 }
