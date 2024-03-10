@@ -7,6 +7,9 @@ import {
   Param,
   Delete,
   Put,
+  ParseUUIDPipe,
+  NotFoundException,
+  HttpCode,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -36,21 +39,29 @@ export class UserController {
   @Get(':id')
   @ApiOperation({ summary: 'Get user with id' })
   @ApiResponse({ status: 200, type: User })
-  findOne(@Param('id') id: string) {
-    return this.userService.findOne(id);
+  findOne(@Param('id', new ParseUUIDPipe({ version: '4' })) id: string) {
+    const user = this.userService.findOne(id);
+    if (!user) throw new NotFoundException(`Can't find user with id:  ${id}`);
+    return user;
   }
 
   @Put(':id')
   @ApiOperation({ summary: 'Update user with id' })
   @ApiResponse({ status: 200, type: User })
-  update(@Param('id') id: string, @Body() updateUserDto: UpdatePasswordDto) {
-    return this.userService.update(id, updateUserDto);
+  update(
+    @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
+    @Body() updateUserDto: UpdatePasswordDto,
+  ) {
+    const user = this.userService.update(id, updateUserDto);
+    if (!user) throw new NotFoundException(`Can't find user with id:  ${id}`);
+    return user;
   }
 
   @Delete(':id')
   @ApiOperation({ summary: 'Delete user with id' })
   @ApiResponse({ status: 204 })
-  remove(@Param('id') id: string) {
+  @HttpCode(204)
+  remove(@Param('id', new ParseUUIDPipe({ version: '4' })) id: string) {
     return this.userService.remove(id);
   }
 }
