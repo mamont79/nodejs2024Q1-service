@@ -105,6 +105,7 @@ paths:
   /artist:
     post:
       operationId: ArtistController_create
+      summary: Create artist
       parameters: []
       requestBody:
         required: true
@@ -115,15 +116,31 @@ paths:
       responses:
         '201':
           description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Artist'
+      tags:
+        - Artist
     get:
       operationId: ArtistController_findAll
+      summary: Get all artists
       parameters: []
       responses:
         '200':
           description: ''
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Artist'
+      tags:
+        - Artist
   /artist/{id}:
     get:
       operationId: ArtistController_findOne
+      summary: Get track with id
       parameters:
         - name: id
           required: true
@@ -133,8 +150,15 @@ paths:
       responses:
         '200':
           description: ''
-    patch:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Artist'
+      tags:
+        - Artist
+    put:
       operationId: ArtistController_update
+      summary: Update artist with id
       parameters:
         - name: id
           required: true
@@ -150,8 +174,15 @@ paths:
       responses:
         '200':
           description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Artist'
+      tags:
+        - Artist
     delete:
       operationId: ArtistController_remove
+      summary: Delete artist with id
       parameters:
         - name: id
           required: true
@@ -159,8 +190,10 @@ paths:
           schema:
             type: string
       responses:
-        '200':
+        '204':
           description: ''
+      tags:
+        - Artist
   /track:
     post:
       operationId: TrackController_create
@@ -425,10 +458,39 @@ components:
         - newPassword
     CreateArtistDto:
       type: object
-      properties: {}
+      properties:
+        name:
+          type: string
+        grammy:
+          type: boolean
+      required:
+        - name
+        - grammy
+    Artist:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          nullable: true
+        name:
+          type: string
+        grammy:
+          type: boolean
+      required:
+        - id
+        - name
+        - grammy
     UpdateArtistDto:
       type: object
-      properties: {}
+      properties:
+        name:
+          type: string
+        grammy:
+          type: boolean
+      required:
+        - name
+        - grammy
     CreateTrackDto:
       type: object
       properties:

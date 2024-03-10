@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { CreateArtistDto } from './dto/create-artist.dto';
 import { UpdateArtistDto } from './dto/update-artist.dto';
 import { DbService } from '../db/db.service';
-import { IArtist } from '../types/types';
+import { IAlbum, IArtist, ITrack } from '../types/types';
 
 @Injectable()
 export class ArtistService {
@@ -54,6 +54,16 @@ export class ArtistService {
         message: `Can't find artist with id ${id}. Please, check your id`,
       });
     }
+
+    this.db.albums.map((alb) => {
+      const album: IAlbum = alb;
+      if (album.artistId === id) album.artistId = null;
+    });
+
+    this.db.tracks.map((tr) => {
+      const track: ITrack = tr;
+      if (track.artistId === id) track.artistId = null;
+    });
 
     this.DbArtists.splice(idArtistToRemove, 1);
   }
