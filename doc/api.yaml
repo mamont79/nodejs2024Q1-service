@@ -164,6 +164,7 @@ paths:
   /track:
     post:
       operationId: TrackController_create
+      summary: Create track
       parameters: []
       requestBody:
         required: true
@@ -174,15 +175,31 @@ paths:
       responses:
         '201':
           description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Track'
+      tags:
+        - Track
     get:
       operationId: TrackController_findAll
+      summary: Get all tracks
       parameters: []
       responses:
         '200':
           description: ''
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Track'
+      tags:
+        - Track
   /track/{id}:
     get:
       operationId: TrackController_findOne
+      summary: Get track with id
       parameters:
         - name: id
           required: true
@@ -192,8 +209,15 @@ paths:
       responses:
         '200':
           description: ''
-    patch:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Track'
+      tags:
+        - Track
+    put:
       operationId: TrackController_update
+      summary: Update track with id
       parameters:
         - name: id
           required: true
@@ -209,8 +233,15 @@ paths:
       responses:
         '200':
           description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Track'
+      tags:
+        - Track
     delete:
       operationId: TrackController_remove
+      summary: Delete track with id
       parameters:
         - name: id
           required: true
@@ -218,8 +249,10 @@ paths:
           schema:
             type: string
       responses:
-        '200':
+        '204':
           description: ''
+      tags:
+        - Track
   /album:
     post:
       operationId: AlbumController_create
@@ -398,10 +431,69 @@ components:
       properties: {}
     CreateTrackDto:
       type: object
-      properties: {}
+      properties:
+        name:
+          type: string
+        artistId:
+          type: string
+          format: uuid
+          nullable: true
+        albumId:
+          type: string
+          format: uuid
+          nullable: true
+        duration:
+          type: number
+      required:
+        - name
+        - artistId
+        - albumId
+        - duration
+    Track:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          nullable: true
+        name:
+          type: string
+        artistId:
+          type: string
+          format: uuid
+          nullable: true
+        albumId:
+          type: string
+          format: uuid
+          nullable: true
+        duration:
+          type: number
+      required:
+        - id
+        - name
+        - artistId
+        - albumId
+        - duration
     UpdateTrackDto:
       type: object
-      properties: {}
+      properties:
+        name:
+          type: string
+        artistId:
+          type: string
+          format: uuid
+          nullable: true
+        albumId:
+          type: string
+          format: uuid
+          nullable: true
+        duration:
+          type: number
+      required:
+        - name
+        - artistId
+        - albumId
+        - duration
     CreateAlbumDto:
       type: object
       properties: {}
