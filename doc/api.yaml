@@ -409,6 +409,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Artist'
+        '422':
+          description: Artist with such id doesn't exist
       tags:
         - Favourites
     delete:
@@ -442,6 +444,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Track'
+        '422':
+          description: Track with such id doesn't exist
       tags:
         - Favourites
     delete:
@@ -475,6 +479,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Album'
+        '422':
+          description: Album with such id doesn't exist
       tags:
         - Favourites
     delete:

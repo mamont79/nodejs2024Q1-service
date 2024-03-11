@@ -47,12 +47,17 @@ export class TrackService {
 
   remove(id: string) {
     const idTreckToRemove = this.DbTracks.findIndex((track) => track.id === id);
+    const idFavTrackToRemove = this.db.favorites.tracks.findIndex(
+      (track) => track.id === id,
+    );
 
     if (idTreckToRemove < 0) {
       throw new NotFoundException({
         message: `Can't find track with id ${id}. Please, check your id`,
       });
     }
+    if (idFavTrackToRemove >= 0)
+      this.db.favorites.tracks.splice(idFavTrackToRemove, 1);
 
     this.DbTracks.splice(idTreckToRemove, 1);
   }

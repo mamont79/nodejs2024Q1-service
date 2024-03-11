@@ -46,12 +46,17 @@ export class AlbumService {
 
   remove(id: string) {
     const idAlbumToRemove = this.DbAlbums.findIndex((album) => album.id === id);
+    const idFavAlbumToRemove = this.db.favorites.albums.findIndex(
+      (album) => album.id === id,
+    );
 
     if (idAlbumToRemove < 0) {
       throw new NotFoundException({
         message: `Can't find album with id ${id}. Please, check album id`,
       });
     }
+    if (idFavAlbumToRemove >= 0)
+      this.db.favorites.albums.splice(idFavAlbumToRemove, 1);
 
     this.db.tracks.map((tr) => {
       const track: ITrack = tr;

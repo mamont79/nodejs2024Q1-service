@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  UnprocessableEntityException,
+} from '@nestjs/common';
 import { v4 as uuidv4 } from 'uuid';
 import { CreateFavDto } from './dto/create-fav.dto';
 import { UpdateFavDto } from './dto/update-fav.dto';
@@ -27,7 +31,7 @@ export class FavsService {
   addFavArtist(id: string) {
     const artist = this.artistService.findOne(id);
     if (!artist)
-      throw new NotFoundException({
+      throw new UnprocessableEntityException({
         message: `Can't find artist with id: ${id}`,
       });
     this.DbFavs.artists.push(artist);
@@ -48,7 +52,7 @@ export class FavsService {
   addFavTrack(id: string) {
     const track = this.trackService.findOne(id);
     if (!track)
-      throw new NotFoundException({
+      throw new UnprocessableEntityException({
         message: `Can't find track with id: ${id}`,
       });
     this.DbFavs.tracks.push(track);
@@ -67,7 +71,7 @@ export class FavsService {
   addFavAlbum(id: string) {
     const album = this.albumService.findOne(id);
     if (!album)
-      throw new NotFoundException({
+      throw new UnprocessableEntityException({
         message: `Can't find album with id: ${id}`,
       });
     this.DbFavs.albums.push(album);

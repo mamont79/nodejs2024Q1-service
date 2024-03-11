@@ -48,12 +48,18 @@ export class ArtistService {
     const idArtistToRemove = this.DbArtists.findIndex(
       (artist) => artist.id === id,
     );
+    const idFavArtistToRemove = this.db.favorites.artists.findIndex(
+      (artist) => artist.id === id,
+    );
 
     if (idArtistToRemove < 0) {
       throw new NotFoundException({
         message: `Can't find artist with id ${id}. Please, check your id`,
       });
     }
+
+    if (idFavArtistToRemove >= 0)
+      this.db.favorites.artists.splice(idFavArtistToRemove, 1);
 
     this.db.albums.map((alb) => {
       const album: IAlbum = alb;

@@ -9,7 +9,12 @@ import {
   ParseUUIDPipe,
   HttpCode,
 } from '@nestjs/common';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+  ApiUnprocessableEntityResponse,
+} from '@nestjs/swagger';
 import { FavsService } from './favs.service';
 import { CreateFavDto } from './dto/create-fav.dto';
 import { UpdateFavDto } from './dto/update-fav.dto';
@@ -33,6 +38,9 @@ export class FavsController {
   @Post('artist/:id')
   @ApiOperation({ summary: 'Add artist to favourites' })
   @ApiResponse({ status: 201, type: Artist })
+  @ApiUnprocessableEntityResponse({
+    description: `Artist with such id doesn't exist`,
+  })
   addFavArtist(@Param('id', new ParseUUIDPipe({ version: '4' })) id: string) {
     return this.favsService.addFavArtist(id);
   }
@@ -50,6 +58,9 @@ export class FavsController {
   @Post('track/:id')
   @ApiOperation({ summary: 'Add track to favourites' })
   @ApiResponse({ status: 201, type: Track })
+  @ApiUnprocessableEntityResponse({
+    description: `Track with such id doesn't exist`,
+  })
   addFavTrack(@Param('id', new ParseUUIDPipe({ version: '4' })) id: string) {
     return this.favsService.addFavTrack(id);
   }
@@ -65,6 +76,9 @@ export class FavsController {
   @Post('album/:id')
   @ApiOperation({ summary: 'Add album to favourites' })
   @ApiResponse({ status: 201, type: Album })
+  @ApiUnprocessableEntityResponse({
+    description: `Album with such id doesn't exist`,
+  })
   addFavAlbum(@Param('id', new ParseUUIDPipe({ version: '4' })) id: string) {
     return this.favsService.addFavAlbum(id);
   }
