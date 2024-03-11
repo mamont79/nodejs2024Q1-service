@@ -379,55 +379,41 @@ paths:
       tags:
         - Album
   /favs:
-    post:
-      operationId: FavsController_create
+    get:
+      operationId: FavsController_findAll
+      summary: Get all favourites
       parameters: []
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CreateFavDto'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Fav'
+      tags:
+        - Favourites
+  /favs/artist/{id}:
+    post:
+      operationId: FavsController_addFavArtist
+      summary: Add artist to favourites
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
       responses:
         '201':
           description: ''
-    get:
-      operationId: FavsController_findAll
-      parameters: []
-      responses:
-        '200':
-          description: ''
-  /favs/{id}:
-    get:
-      operationId: FavsController_findOne
-      parameters:
-        - name: id
-          required: true
-          in: path
-          schema:
-            type: string
-      responses:
-        '200':
-          description: ''
-    patch:
-      operationId: FavsController_update
-      parameters:
-        - name: id
-          required: true
-          in: path
-          schema:
-            type: string
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UpdateFavDto'
-      responses:
-        '200':
-          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Artist'
+      tags:
+        - Favourites
     delete:
-      operationId: FavsController_remove
+      operationId: FavsController_removeFavArtist
+      summary: Remove artist from favourites
       parameters:
         - name: id
           required: true
@@ -435,8 +421,76 @@ paths:
           schema:
             type: string
       responses:
-        '200':
+        '204':
           description: ''
+      tags:
+        - Favourites
+  /favs/track/{id}:
+    post:
+      operationId: FavsController_addFavTrack
+      summary: Add track to favourites
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '201':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Track'
+      tags:
+        - Favourites
+    delete:
+      operationId: FavsController_removeFavTrack
+      summary: Remove track from favourites
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '204':
+          description: ''
+      tags:
+        - Favourites
+  /favs/album/{id}:
+    post:
+      operationId: FavsController_addFavAlbum
+      summary: Add album to favourites
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '201':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Album'
+      tags:
+        - Favourites
+    delete:
+      operationId: FavsController_removeFavAlbum
+      summary: Remove album from favourites
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '204':
+          description: ''
+      tags:
+        - Favourites
 info:
   title: NodeJS2024Q1-Service
   description: 'Home Library Service : Tast7'
@@ -639,9 +693,22 @@ components:
         - name
         - year
         - artistId
-    CreateFavDto:
+    Fav:
       type: object
-      properties: {}
-    UpdateFavDto:
-      type: object
-      properties: {}
+      properties:
+        artists:
+          type: array
+          items:
+            $ref: '#/components/schemas/Artist'
+        albums:
+          type: array
+          items:
+            $ref: '#/components/schemas/Album'
+        tracks:
+          type: array
+          items:
+            $ref: '#/components/schemas/Track'
+      required:
+        - artists
+        - albums
+        - tracks
