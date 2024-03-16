@@ -1,4 +1,6 @@
 node_modules
 dist
-test
 coverage
+app.Dockerfile
+db.Dockerfile
+docker-compose.yml
