@@ -24,7 +24,9 @@
     "docker:start": "docker-compose up -d",
     "docker:stop": "docker-compose stop",
     "docker:down": "docker-compose down",
-    "docker:clean": "docker system prune -a"
+    "docker:clean": "docker system prune -a",
+    "docker:test": "docker exec -it app npm run test",
+    "docker:scan": "docker scout cves mamont79/app && docker scout cves mamont79/db"
   },
   "dependencies": {
     "@nestjs/common": "^10.3.3",

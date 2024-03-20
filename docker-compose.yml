@@ -1,4 +1,4 @@
-version: '3.0'
+version: '3'
 
 services:
   app:
@@ -55,12 +55,11 @@ volumes:
 
 networks:
   app-network:
+    name: intra
     driver: bridge
-    driver_opts:
-      com.docker.network.bridge.enable_icc: 'true'
     ipam:
       driver: default
       config:
-        - subnet: 192.168.100.0/24
-          ip_range: 192.168.100.0/24
-          gateway: 192.168.100.1
+        - subnet: ${NETWORK_SUBNET}
+          ip_range: ${NETWORK_IP_RANGE}
+          gateway: ${NETWORK_GATEWAY}
