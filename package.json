@@ -21,10 +21,10 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "docker:build": "docker-compose build --no-cache",
-    "docker:start": "docker-compose up -d",
+    "docker:start": "docker-compose up -d --build",
     "docker:stop": "docker-compose stop",
     "docker:down": "docker-compose down",
-    "docker:clean": "docker system prune -a",
+    "docker:clean": "docker-compose down && docker system prune -af && docker volume rm data",
     "docker:test": "docker exec -it app npm run test",
     "docker:scan": "docker scout cves mamont79/app && docker scout cves mamont79/db"
   },

@@ -5,6 +5,7 @@ services:
     build:
       context: .
       dockerfile: app.Dockerfile
+    container_name: app
     image: mamont79/home-lib-service:latest
     restart: always
     env_file: .env
@@ -22,6 +23,7 @@ services:
     build:
       context: .
       dockerfile: db.Dockerfile
+    container_name: db
     image: mamont79/home-lib-service:latest
     restart: always
     env_file: .env
@@ -33,29 +35,13 @@ services:
       app-network:
         ipv4_address: 192.168.100.101
 
-  db-ui:
-    image: dpage/pgadmin4:7.5
-    environment:
-      PGADMIN_DEFAULT_EMAIL: 'dalhoupavel@gmail.com'
-      PGADMIN_DEFAULT_PASSWORD: 'mamont79'
-      PGADMIN_CONFIG_SERVER_MODE: 'False'
-    volumes:
-      - ./data/pgadmin:/var/lib/pgadmin
-    ports:
-      - '5050:80'
-    restart: always
-    networks:
-      app-network:
-        ipv4_address: 192.168.100.102
-    depends_on:
-      - db
-
 volumes:
   postgres:
+    name: data
 
 networks:
   app-network:
-    name: intra
+    name: intro
     driver: bridge
     ipam:
       driver: default
