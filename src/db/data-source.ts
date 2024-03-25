@@ -13,7 +13,7 @@ export const dataSourceOptions: DataSourceOptions = {
   migrations: ['dist/db/migrations/*.js'],
 };
 
-export const dataSourceOptionsForLocalMigration: DataSourceOptions = {
+export const dataSourceOptionsLocal: DataSourceOptions = {
   type: 'postgres',
   host: 'localhost',
   port: Number(process.env.POSTGRES_PORT),
@@ -25,5 +25,5 @@ export const dataSourceOptionsForLocalMigration: DataSourceOptions = {
   migrations: ['dist/db/migrations/*.js'],
 };
 
-const dataSource = new DataSource(dataSourceOptionsForLocalMigration);
+const dataSource = new DataSource(dataSourceOptionsLocal);
 export default dataSource;

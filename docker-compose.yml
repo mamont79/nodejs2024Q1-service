@@ -5,6 +5,7 @@ services:
     build:
       context: .
       dockerfile: app.Dockerfile
+    image: mamont79/app
     container_name: app
     restart: always
     env_file: .env
@@ -22,6 +23,7 @@ services:
     build:
       context: .
       dockerfile: db.Dockerfile
+    image: mamont79/db
     container_name: db
     restart: always
     env_file: .env
