@@ -15,12 +15,7 @@ import { TrackService } from '../track/track.service';
 
 @Injectable()
 export class FavsService {
-  constructor(
-    private readonly db: DbService,
-    private readonly trackService: TrackService,
-  ) // private readonly albumService: AlbumService,
-  // private readonly artistService: ArtistService,
-  {}
+  constructor(private readonly db: DbService) {}
 
   private DbFavs: Fav = this.db.favorites;
 

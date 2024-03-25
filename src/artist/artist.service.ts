@@ -44,20 +44,5 @@ export class ArtistService {
 
   async remove(id: string) {
     await this.artistRepository.delete(id);
-
-    //   if (idFavArtistToRemove >= 0)
-    //     this.db.favorites.artists.splice(idFavArtistToRemove, 1);
-
-    //   this.db.albums.map((alb) => {
-    //     const album: IAlbum = alb;
-    //     if (album.artistId === id) album.artistId = null;
-    //   });
-
-    //   this.db.tracks.map((tr) => {
-    //     const track: ITrack = tr;
-    //     if (track.artistId === id) track.artistId = null;
-    //   });
-
-    //   this.DbArtists.splice(idArtistToRemove, 1);
   }
 }

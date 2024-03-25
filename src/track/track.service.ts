@@ -4,14 +4,17 @@ import { CreateTrackDto } from './dto/create-track.dto';
 import { UpdateTrackDto } from './dto/update-track.dto';
 import { DbService } from '../db/db.service';
 import { ITrack } from '../types/types';
+import { Track } from './entities/track.entity';
+import { Repository } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class TrackService {
-  constructor(private readonly db: DbService) {}
+  constructor(
+    @InjectRepository(Track) private trackRepository: Repository<Track>,
+  ) {}
 
-  private DbTracks: Array<ITrack> = this.db.tracks;
-
-  create(createTrackDto: CreateTrackDto) {
+  async create(createTrackDto: CreateTrackDto) {
     const trackId = uuidv4();
 
     const newTrack: ITrack = {
@@ -19,46 +22,30 @@ export class TrackService {
       ...createTrackDto,
     };
 
-    this.DbTracks.push(newTrack);
-    return newTrack;
+    const newTrackData = this.trackRepository.create(newTrack);
+    return await this.trackRepository.save(newTrackData);
   }
 
-  findAll() {
-    return this.DbTracks;
+  async findAll() {
+    return await this.trackRepository.find();
   }
 
-  findOne(id: string) {
-    const trackToFind = this.DbTracks.find((track) => track.id === id);
-    return trackToFind;
+  async findOne(id: string) {
+    return await this.trackRepository.findOneBy({ id });
   }
 
-  update(id: string, updateTrackDto: UpdateTrackDto) {
-    const trackToUpdate = this.DbTracks.find((track) => track.id === id);
-
-    if (!trackToUpdate) return trackToUpdate;
+  async update(id: string, updateTrackDto: UpdateTrackDto) {
+    const trackToUpdate = await this.trackRepository.findOneBy({ id });
 
     trackToUpdate.name = updateTrackDto.name;
     trackToUpdate.artistId = updateTrackDto.artistId;
     trackToUpdate.albumId = updateTrackDto.albumId;
     trackToUpdate.duration = updateTrackDto.duration;
 
-    return trackToUpdate;
+    return await this.trackRepository.save(trackToUpdate);
   }
 
-  remove(id: string) {
-    const idTreckToRemove = this.DbTracks.findIndex((track) => track.id === id);
-    const idFavTrackToRemove = this.db.favorites.tracks.findIndex(
-      (track) => track.id === id,
-    );
-
-    if (idTreckToRemove < 0) {
-      throw new NotFoundException({
-        message: `Can't find track with id ${id}. Please, check your id`,
-      });
-    }
-    if (idFavTrackToRemove >= 0)
-      this.db.favorites.tracks.splice(idFavTrackToRemove, 1);
-
-    this.DbTracks.splice(idTreckToRemove, 1);
+  async remove(id: string) {
+    await this.trackRepository.delete(id);
   }
 }

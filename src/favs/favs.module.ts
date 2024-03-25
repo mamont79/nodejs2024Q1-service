@@ -10,7 +10,7 @@ import { TrackService } from '../track/track.service';
   controllers: [FavsController],
   providers: [
     FavsService,
-    TrackService,
+    // TrackService,
     // AlbumService,
     // ArtistService,
     DbService,
