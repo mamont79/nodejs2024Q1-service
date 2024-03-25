@@ -11,8 +11,8 @@ import { TrackService } from '../track/track.service';
   providers: [
     FavsService,
     TrackService,
-    AlbumService,
-    ArtistService,
+    // AlbumService,
+    // ArtistService,
     DbService,
   ],
 })

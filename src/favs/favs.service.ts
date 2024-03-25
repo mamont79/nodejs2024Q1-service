@@ -18,72 +18,72 @@ export class FavsService {
   constructor(
     private readonly db: DbService,
     private readonly trackService: TrackService,
-    private readonly albumService: AlbumService,
-    private readonly artistService: ArtistService,
-  ) {}
+  ) // private readonly albumService: AlbumService,
+  // private readonly artistService: ArtistService,
+  {}
 
   private DbFavs: Fav = this.db.favorites;
 
   findAll() {
-    return this.DbFavs;
+    // return this.DbFavs;
   }
 
   addFavArtist(id: string) {
-    const artist = this.artistService.findOne(id);
-    if (!artist)
-      throw new UnprocessableEntityException({
-        message: `Can't find artist with id: ${id}`,
-      });
-    this.DbFavs.artists.push(artist);
-    return artist;
+    // const artist = this.artistService.findOne(id);
+    // if (!artist)
+    //   throw new UnprocessableEntityException({
+    //     message: `Can't find artist with id: ${id}`,
+    //   });
+    // this.DbFavs.artists.push(artist);
+    // return artist;
   }
 
   removeFavArtist(id: string) {
-    const artistId = this.DbFavs.artists.findIndex(
-      (artist) => artist.id === id,
-    );
-    if (artistId < 0)
-      throw new NotFoundException({
-        message: `Can't find artist with id: ${id}`,
-      });
-    this.DbFavs.artists.splice(artistId, 1);
+    // const artistId = this.DbFavs.artists.findIndex(
+    //   (artist) => artist.id === id,
+    // );
+    // if (artistId < 0)
+    //   throw new NotFoundException({
+    //     message: `Can't find artist with id: ${id}`,
+    //   });
+    // this.DbFavs.artists.splice(artistId, 1);
   }
 
   addFavTrack(id: string) {
-    const track = this.trackService.findOne(id);
-    if (!track)
-      throw new UnprocessableEntityException({
-        message: `Can't find track with id: ${id}`,
-      });
-    this.DbFavs.tracks.push(track);
-    return track;
+    // const track = this.trackService.findOne(id);
+    // if (!track)
+    //   throw new UnprocessableEntityException({
+    //     message: `Can't find track with id: ${id}`,
+    //   });
+    // this.DbFavs.tracks.push(track);
+    // return track;
   }
 
   removeFavTrack(id: string) {
-    const trackId = this.DbFavs.tracks.findIndex((track) => track.id === id);
-    if (trackId < 0)
-      throw new NotFoundException({
-        message: `Can't find track with id: ${id}`,
-      });
-    this.DbFavs.tracks.splice(trackId, 1);
+    // const trackId = this.DbFavs.tracks.findIndex((track) => track.id === id);
+    // if (trackId < 0)
+    //   throw new NotFoundException({
+    //     message: `Can't find track with id: ${id}`,
+    //   });
+    // this.DbFavs.tracks.splice(trackId, 1);
   }
 
   addFavAlbum(id: string) {
-    const album = this.albumService.findOne(id);
-    if (!album)
-      throw new UnprocessableEntityException({
-        message: `Can't find album with id: ${id}`,
-      });
-    this.DbFavs.albums.push(album);
-    return album;
+    // const album = this.albumService.findOne(id);
+    // if (!album)
+    //   throw new UnprocessableEntityException({
+    //     message: `Can't find album with id: ${id}`,
+    //   });
+    // this.DbFavs.albums.push(album);
+    // return album;
   }
 
   removeFavAlbum(id: string) {
-    const albumId = this.DbFavs.albums.findIndex((album) => album.id === id);
-    if (albumId < 0)
-      throw new NotFoundException({
-        message: `Can't find album with id: ${id}`,
-      });
-    this.DbFavs.albums.splice(albumId, 1);
+    // const albumId = this.DbFavs.albums.findIndex((album) => album.id === id);
+    // if (albumId < 0)
+    //   throw new NotFoundException({
+    //     message: `Can't find album with id: ${id}`,
+    //   });
+    // this.DbFavs.albums.splice(albumId, 1);
   }
 }

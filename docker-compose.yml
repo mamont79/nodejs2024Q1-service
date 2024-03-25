@@ -1,4 +1,4 @@
-version: '3'
+version: '3.8'
 
 services:
   app:
@@ -6,42 +6,43 @@ services:
       context: .
       dockerfile: app.Dockerfile
     container_name: app
-    image: mamont79/home-lib-service:latest
     restart: always
     env_file: .env
     ports:
-      - 4000:4000
+      - ${PORT}:${PORT}
     volumes:
       - ./src:/app/src
     networks:
       app-network:
-        ipv4_address: 192.168.100.100
     depends_on:
-      - db
+      db:
+        condition: service_healthy
 
   db:
     build:
       context: .
       dockerfile: db.Dockerfile
     container_name: db
-    image: mamont79/home-lib-service:latest
     restart: always
     env_file: .env
     ports:
-      - 5432:5432
+      - ${POSTGRES_PORT}:${POSTGRES_PORT}
     volumes:
-      - postgres:/var/lib/postgresql/data
+      - data:/var/lib/postgresql/data
+      - logs:/logs
+    command: postgres -p $POSTGRES_PORT -c logging_collector=$POSTGRES_LOG -c log_directory=/logs -c log_min_messages=$POSTGRES_LOG_LEVEL
     networks:
       app-network:
-        ipv4_address: 192.168.100.101
 
 volumes:
-  postgres:
+  data:
     name: data
+  logs:
+    name: logs
 
 networks:
   app-network:
-    name: intro
+    name: intra
     driver: bridge
     ipam:
       driver: default

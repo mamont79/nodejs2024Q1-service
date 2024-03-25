@@ -7,23 +7,13 @@ import { ArtistModule } from './artist/artist.module';
 import { TrackModule } from './track/track.module';
 import { AlbumModule } from './album/album.module';
 import { FavsModule } from './favs/favs.module';
-import { DbService } from './db/db.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { User } from './user/entities/user.entity';
+import { dataSourceOptions } from 'src/db/data-source';
 
 @Module({
   imports: [
     ConfigModule.forRoot(),
-    TypeOrmModule.forRoot({
-      type: 'postgres',
-      host: process.env.POSTGRES_HOST,
-      port: Number(process.env.POSTGRES_PORT),
-      username: process.env.POSTGRES_USER,
-      password: process.env.POSTGRES_PASSWORD,
-      database: process.env.POSTGRES_DB,
-      entities: [User],
-      synchronize: true,
-    }),
+    TypeOrmModule.forRoot(dataSourceOptions),
     UserModule,
     ArtistModule,
     TrackModule,
@@ -31,6 +21,6 @@ import { User } from './user/entities/user.entity';
     FavsModule,
   ],
   controllers: [AppController],
-  providers: [AppService, DbService],
+  providers: [AppService],
 })
 export class AppModule {}
