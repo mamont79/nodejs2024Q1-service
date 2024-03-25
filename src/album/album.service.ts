@@ -3,7 +3,6 @@ import { v4 as uuidv4 } from 'uuid';
 import { CreateAlbumDto } from './dto/create-album.dto';
 import { UpdateAlbumDto } from './dto/update-album.dto';
 import { Album } from './entities/album.entity';
-import { ITrack } from '../types/types';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
@@ -35,8 +34,6 @@ export class AlbumService {
 
   async update(id: string, updateAlbumDto: UpdateAlbumDto) {
     const albumToUpdate = await this.albumRepository.findOneBy({ id });
-
-    // if (!albumToUpdate) return albumToUpdate;
 
     albumToUpdate.name = updateAlbumDto.name;
     albumToUpdate.year = updateAlbumDto.year;
