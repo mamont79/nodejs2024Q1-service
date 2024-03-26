@@ -23,12 +23,6 @@ npm install
 npm start
 ```
 
-## For migration create
-
-```
-npm run migration:create -n src/db/migrations/db
-```
-
 After starting the app on port (4000 as default) you can open
 in your browser OpenAPI documentation by typing http://localhost:4000/doc/.
 For more information about OpenAPI/Swagger please visit https://swagger.io/.
@@ -71,8 +65,65 @@ npm run lint
 npm run format
 ```
 
-### Debugging in VSCode
+## Instructions for Part2
 
-Press <kbd>F5</kbd> to debug.
+## Steps to get checked:
 
-For more information, visit: https://code.visualstudio.com/docs/editor/debugging
+- Clone repo and checkout to the **sprint2** branch
+- Install dependencies:
+
+```
+npm i
+```
+
+- Create **.env file** (based on .env.example)
+- Build app and db images, run containers in daemon mode and run migrations:
+
+```
+npm run docker:up
+```
+
+- For run linter:
+
+```
+npm run lint
+```
+
+- For tests:
+
+```
+npm run test
+```
+
+for local or
+
+```
+npm run docker:test
+```
+
+in container
+
+## Other commands
+
+- For vulnerabilities scanning: **npm run docker:scan**
+- For stop and remove containers - **npm run docker:down**
+- For full cleanup: **npm run docker:clean**
+- For build images without running - **npm run docker:build**
+
+## A few important notes
+
+- The application container runs in hot-reload mode - you can change the source code in the local ./src folder and the application in the container will restart automatically.
+- All migrations are done locally
+- If you want to change application or database port settings first stop and remove containers - **npm run docker:down**, make changes in **.env** file and then start again **npm run docker:up**
+
+- If during startup or testing you see error messages such as
+
+```
+Error: Connection terminated unexpectedly
+Exceeded timeout of 5000 ms for a test
+dependency failed to start: container db is unhealthy
+```
+
+or something similar, it is most likely that your hardware is not coping with the load. Try full cleanup and restarting everything by stopping all non-test related applications
+
+- You can see the images in the public repo at https://hub.docker.com/u/mamont79
