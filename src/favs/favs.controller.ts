@@ -2,8 +2,6 @@ import {
   Controller,
   Get,
   Post,
-  Body,
-  Patch,
   Param,
   Delete,
   ParseUUIDPipe,
@@ -16,8 +14,6 @@ import {
   ApiUnprocessableEntityResponse,
 } from '@nestjs/swagger';
 import { FavsService } from './favs.service';
-import { CreateFavDto } from './dto/create-fav.dto';
-import { UpdateFavDto } from './dto/update-fav.dto';
 import { Fav } from './entities/fav.entity';
 import { Track } from '../track/entities/track.entity';
 import { Artist } from '../artist/entities/artist.entity';
@@ -31,8 +27,8 @@ export class FavsController {
   @Get()
   @ApiOperation({ summary: 'Get all favourites' })
   @ApiResponse({ status: 200, type: Fav })
-  findAll() {
-    return this.favsService.findAll();
+  async findAll() {
+    return await this.favsService.findAll();
   }
 
   @Post('artist/:id')
@@ -41,18 +37,20 @@ export class FavsController {
   @ApiUnprocessableEntityResponse({
     description: `Artist with such id doesn't exist`,
   })
-  addFavArtist(@Param('id', new ParseUUIDPipe({ version: '4' })) id: string) {
-    return this.favsService.addFavArtist(id);
+  async addFavArtist(
+    @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
+  ) {
+    return await this.favsService.addFavArtist(id);
   }
 
   @Delete('artist/:id')
   @ApiOperation({ summary: 'Remove artist from favourites' })
   @ApiResponse({ status: 204 })
   @HttpCode(204)
-  removeFavArtist(
+  async removeFavArtist(
     @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
   ) {
-    return this.favsService.removeFavArtist(id);
+    return await this.favsService.removeFavArtist(id);
   }
 
   @Post('track/:id')
@@ -61,16 +59,20 @@ export class FavsController {
   @ApiUnprocessableEntityResponse({
     description: `Track with such id doesn't exist`,
   })
-  addFavTrack(@Param('id', new ParseUUIDPipe({ version: '4' })) id: string) {
-    return this.favsService.addFavTrack(id);
+  async addFavTrack(
+    @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
+  ) {
+    return await this.favsService.addFavTrack(id);
   }
 
   @Delete('track/:id')
   @ApiOperation({ summary: 'Remove track from favourites' })
   @ApiResponse({ status: 204 })
   @HttpCode(204)
-  removeFavTrack(@Param('id', new ParseUUIDPipe({ version: '4' })) id: string) {
-    return this.favsService.removeFavTrack(id);
+  async removeFavTrack(
+    @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
+  ) {
+    return await this.favsService.removeFavTrack(id);
   }
 
   @Post('album/:id')
@@ -79,15 +81,19 @@ export class FavsController {
   @ApiUnprocessableEntityResponse({
     description: `Album with such id doesn't exist`,
   })
-  addFavAlbum(@Param('id', new ParseUUIDPipe({ version: '4' })) id: string) {
-    return this.favsService.addFavAlbum(id);
+  async addFavAlbum(
+    @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
+  ) {
+    return await this.favsService.addFavAlbum(id);
   }
 
   @Delete('album/:id')
   @ApiOperation({ summary: 'Remove album from favourites' })
   @ApiResponse({ status: 204 })
   @HttpCode(204)
-  removeFavAlbum(@Param('id', new ParseUUIDPipe({ version: '4' })) id: string) {
-    return this.favsService.removeFavAlbum(id);
+  async removeFavAlbum(
+    @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
+  ) {
+    return await this.favsService.removeFavAlbum(id);
   }
 }

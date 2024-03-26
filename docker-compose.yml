@@ -1,0 +1,59 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: app.Dockerfile
+    image: mamont79/app
+    container_name: app
+    restart: always
+    env_file: .env
+    ports:
+      - ${PORT}:${PORT}
+    volumes:
+      - ./src:/app/src
+    networks:
+      app-network:
+    depends_on:
+      db:
+        condition: service_healthy
+
+  db:
+    build:
+      context: .
+      dockerfile: db.Dockerfile
+    image: mamont79/db
+    container_name: db
+    restart: always
+    env_file: .env
+    ports:
+      - ${POSTGRES_PORT}:${POSTGRES_PORT}
+    volumes:
+      - data:/var/lib/postgresql/data
+      - logs:/logs
+    command: postgres -p $POSTGRES_PORT -c logging_collector=$POSTGRES_LOG -c log_directory=/logs -c log_min_messages=$POSTGRES_LOG_LEVEL
+    healthcheck:
+      test: ['CMD', 'pg_isready', '-U', 'postgres', '-p', $POSTGRES_PORT]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+    networks:
+      app-network:
+
+volumes:
+  data:
+    name: data
+  logs:
+    name: logs
+
+networks:
+  app-network:
+    name: intra
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: ${NETWORK_SUBNET}
+          ip_range: ${NETWORK_IP_RANGE}
+          gateway: ${NETWORK_GATEWAY}

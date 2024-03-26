@@ -3,7 +3,6 @@ import {
   Get,
   Post,
   Body,
-  Patch,
   Param,
   Delete,
   ParseUUIDPipe,
@@ -25,22 +24,22 @@ export class TrackController {
   @Post()
   @ApiOperation({ summary: 'Create track' })
   @ApiResponse({ status: 201, type: Track })
-  create(@Body() createTrackDto: CreateTrackDto) {
-    return this.trackService.create(createTrackDto);
+  async create(@Body() createTrackDto: CreateTrackDto) {
+    return await this.trackService.create(createTrackDto);
   }
 
   @Get()
   @ApiOperation({ summary: 'Get all tracks' })
   @ApiResponse({ status: 200, type: [Track] })
-  findAll() {
-    return this.trackService.findAll();
+  async findAll() {
+    return await this.trackService.findAll();
   }
 
   @Get(':id')
   @ApiOperation({ summary: 'Get track with id' })
   @ApiResponse({ status: 200, type: Track })
-  findOne(@Param('id', new ParseUUIDPipe({ version: '4' })) id: string) {
-    const track = this.trackService.findOne(id);
+  async findOne(@Param('id', new ParseUUIDPipe({ version: '4' })) id: string) {
+    const track = await this.trackService.findOne(id);
     if (!track) throw new NotFoundException(`Can't find track with id:  ${id}`);
     return track;
   }
@@ -48,12 +47,16 @@ export class TrackController {
   @Put(':id')
   @ApiOperation({ summary: 'Update track with id' })
   @ApiResponse({ status: 200, type: Track })
-  update(
+  async update(
     @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
     @Body() updateTrackDto: UpdateTrackDto,
   ) {
-    const track = this.trackService.update(id, updateTrackDto);
-    if (!track) throw new NotFoundException(`Can't find track with id:  ${id}`);
+    const trackToUpdate = await this.trackService.findOne(id);
+
+    if (!trackToUpdate)
+      throw new NotFoundException(`Can't find track with id:  ${id}`);
+
+    const track = await this.trackService.update(id, updateTrackDto);
     return track;
   }
 
@@ -61,7 +64,12 @@ export class TrackController {
   @ApiOperation({ summary: 'Delete track with id' })
   @ApiResponse({ status: 204 })
   @HttpCode(204)
-  remove(@Param('id', new ParseUUIDPipe({ version: '4' })) id: string) {
-    return this.trackService.remove(id);
+  async remove(@Param('id', new ParseUUIDPipe({ version: '4' })) id: string) {
+    const trackToRemove = await this.trackService.findOne(id);
+
+    if (!trackToRemove)
+      throw new NotFoundException(`Can't find track with id:  ${id}`);
+
+    return await this.trackService.remove(id);
   }
 }

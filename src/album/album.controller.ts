@@ -3,7 +3,6 @@ import {
   Get,
   Post,
   Body,
-  Patch,
   Param,
   Delete,
   ParseUUIDPipe,
@@ -25,22 +24,22 @@ export class AlbumController {
   @Post()
   @ApiOperation({ summary: 'Create album' })
   @ApiResponse({ status: 201, type: Album })
-  create(@Body() createAlbumDto: CreateAlbumDto) {
-    return this.albumService.create(createAlbumDto);
+  async create(@Body() createAlbumDto: CreateAlbumDto) {
+    return await this.albumService.create(createAlbumDto);
   }
 
   @Get()
   @ApiOperation({ summary: 'Get all albums' })
   @ApiResponse({ status: 200, type: [Album] })
-  findAll() {
-    return this.albumService.findAll();
+  async findAll() {
+    return await this.albumService.findAll();
   }
 
   @Get(':id')
   @ApiOperation({ summary: 'Get album with id' })
   @ApiResponse({ status: 200, type: Album })
-  findOne(@Param('id', new ParseUUIDPipe({ version: '4' })) id: string) {
-    const album = this.albumService.findOne(id);
+  async findOne(@Param('id', new ParseUUIDPipe({ version: '4' })) id: string) {
+    const album = await this.albumService.findOne(id);
     if (!album) throw new NotFoundException(`Can't find album with id:  ${id}`);
     return album;
   }
@@ -48,12 +47,16 @@ export class AlbumController {
   @Put(':id')
   @ApiOperation({ summary: 'Update album with id' })
   @ApiResponse({ status: 200, type: Album })
-  update(
+  async update(
     @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
     @Body() updateAlbumDto: UpdateAlbumDto,
   ) {
-    const album = this.albumService.update(id, updateAlbumDto);
-    if (!album) throw new NotFoundException(`Can't find album with id:  ${id}`);
+    const albumToUpdate = await this.albumService.findOne(id);
+
+    if (!albumToUpdate)
+      throw new NotFoundException(`Can't find album with id:  ${id}`);
+
+    const album = await this.albumService.update(id, updateAlbumDto);
     return album;
   }
 
@@ -61,7 +64,12 @@ export class AlbumController {
   @ApiOperation({ summary: 'Delete track with id' })
   @ApiResponse({ status: 204 })
   @HttpCode(204)
-  remove(@Param('id', new ParseUUIDPipe({ version: '4' })) id: string) {
-    return this.albumService.remove(id);
+  async remove(@Param('id', new ParseUUIDPipe({ version: '4' })) id: string) {
+    const albumToRemove = await this.albumService.findOne(id);
+
+    if (!albumToRemove)
+      throw new NotFoundException(`Can't find album with id:  ${id}`);
+
+    return await this.albumService.remove(id);
   }
 }
